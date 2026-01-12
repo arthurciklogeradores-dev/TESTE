@@ -1,6 +1,5 @@
-
 import { Fraction } from '../types';
-import { addFractions, subtractFractions, multiplyFractions, divideFractions, simplify } from '../utils/math';
+import { addFractions, subtractFractions, multiplyFractions, divideFractions } from '../utils/math';
 
 export function parseLocalFractions(input: string) {
   const normalized = input.toLowerCase()
@@ -13,13 +12,13 @@ export function parseLocalFractions(input: string) {
   const matches = normalized.match(fractionRegex);
   
   if (!matches || matches.length < 2) {
-    throw new Error("Não consegui entender as frações.");
+    throw new Error("Não consegui entender as frações localmente.");
   }
 
   const getFrac = (str: string): Fraction => {
     if (str.includes('/')) {
       const [n, d] = str.split('/').map(Number);
-      return { n, d };
+      return { n, d: d || 1 };
     }
     return { n: Number(str), d: 1 };
   };
@@ -36,7 +35,7 @@ export function parseLocalFractions(input: string) {
   else { result = divideFractions(f1, f2); op = '/'; }
 
   return {
-    explanation: "Processado localmente (Modo Offline).",
+    explanation: "Cálculo realizado offline.",
     numerator: result.n,
     denominator: result.d,
     expression: `${matches[0]} ${op} ${matches[1]}`
